@@ -9,10 +9,11 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        // Navigator.pushNamed(context, '/chat');
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>IndividualPage()));
-      },
+      onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => IndividualPage(chatModel: chatModel),
+          )),
       child: Column(
         children: [
           ListTile(
