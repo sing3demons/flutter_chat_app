@@ -14,7 +14,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Chat App',
       theme: ThemeData(
-        fontFamily: 'OpenSans',
         primaryColor: const Color(0xFF075E54),
         secondaryHeaderColor: Color(0xFF128C7E),
         colorScheme: ColorScheme.fromSeed(

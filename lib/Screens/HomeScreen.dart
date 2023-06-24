@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen>
     return Scaffold(
       appBar: AppBar(
           backgroundColor: const Color(0xFF128C7E),
-          title: const Text('chat app'),
+          title: const Text('chat app', style: TextStyle(color: Colors.white)),
           actions: [
             IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
             PopupMenuButton(onSelected: (value) {
