@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_app/Pages/ChatPage.dart';
+import 'package:flutter_chat_app/pages/chat_page.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -47,11 +47,11 @@ class _HomeScreenState extends State<HomeScreen>
         Tab(text: 'STATUS'),
         Tab(text: 'CALLS'),
       ]),
-      body: TabBarView(controller: _controller, children: [
-        const Text('camera'),
+      body: TabBarView(controller: _controller, children: const [
+        Text('camera'),
         ChatPage(),
-        const Text('Status'),
-        const Text('Calls'),
+        Text('Status'),
+        Text('Calls'),
       ]),
     );
   }

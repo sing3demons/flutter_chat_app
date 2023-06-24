@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_app/Screens/HomeScreen.dart';
+import 'package:flutter_chat_app/screens/home_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,13 +15,13 @@ class MyApp extends StatelessWidget {
       title: 'Chat App',
       theme: ThemeData(
         primaryColor: const Color(0xFF075E54),
-        secondaryHeaderColor: Color(0xFF128C7E),
+        secondaryHeaderColor: const Color(0xFF128C7E),
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color(0xFF128C7E),
+          seedColor: const Color(0xFF128C7E),
         ),
         useMaterial3: true,
       ),
-      home: HomeScreen(),
+      home: const HomeScreen(),
     );
   }
 }
