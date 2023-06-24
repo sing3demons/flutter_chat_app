@@ -1,6 +1,8 @@
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/model/chat_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 class IndividualPage extends StatefulWidget {
   const IndividualPage({Key? key, required this.chatModel}) : super(key: key);
@@ -10,6 +12,30 @@ class IndividualPage extends StatefulWidget {
 }
 
 class _IndividualPageState extends State<IndividualPage> {
+  final TextEditingController _controller = TextEditingController();
+  bool emojiShowing = false;
+
+  _onBackspacePressed() {
+    _controller
+      ..text = _controller.text.characters.toString()
+      ..selection = TextSelection.fromPosition(
+          TextPosition(offset: _controller.text.length));
+  }
+
+  FocusNode focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        setState(() {
+          emojiShowing = false;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,65 +104,134 @@ class _IndividualPageState extends State<IndividualPage> {
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: Stack(children: [
-          ListView(),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Row(
-              children: [
-                SizedBox(
-                    width: MediaQuery.of(context).size.width - 60,
-                    child: Card(
-                        margin:
-                            const EdgeInsets.only(left: 2, right: 2, bottom: 8),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25)),
-                        child: TextFormField(
-                          textAlignVertical: TextAlignVertical.center,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 5,
-                          minLines: 1,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Type a message',
-                            prefixIcon: IconButton(
-                              icon: const Icon(Icons.emoji_emotions),
-                              onPressed: () {},
-                            ),
-                            suffixIcon: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.attach_file),
-                                  onPressed: () {},
+        child: WillPopScope(
+          child: Stack(children: [
+            ListView(),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(
+                          width: MediaQuery.of(context).size.width - 60,
+                          child: Card(
+                              margin: const EdgeInsets.only(
+                                  left: 2, right: 2, bottom: 8),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25)),
+                              child: TextFormField(
+                                focusNode: focusNode,
+                                textAlignVertical: TextAlignVertical.center,
+                                keyboardType: TextInputType.multiline,
+                                maxLines: 5,
+                                minLines: 1,
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Type a message',
+                                  prefixIcon: IconButton(
+                                    icon: const Icon(Icons.emoji_emotions),
+                                    onPressed: () {
+                                      focusNode.unfocus();
+                                      focusNode.canRequestFocus = false;
+                                      setState(
+                                          () => emojiShowing = !emojiShowing);
+                                    },
+                                  ),
+                                  suffixIcon: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: const Icon(Icons.attach_file),
+                                        onPressed: () {},
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.camera_alt),
+                                        onPressed: () {},
+                                      )
+                                    ],
+                                  ),
+                                  contentPadding: const EdgeInsets.all(5),
                                 ),
-                                IconButton(
-                                  icon: const Icon(Icons.camera_alt),
-                                  onPressed: () {},
-                                )
-                              ],
+                              ))),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(bottom: 8, right: 5, left: 2),
+                        child: CircleAvatar(
+                          radius: 25,
+                          backgroundColor: const Color(0xFF128C7E),
+                          child: IconButton(
+                            icon: const Icon(
+                              Icons.mic,
+                              color: Colors.white,
                             ),
-                            contentPadding: EdgeInsets.all(5),
+                            onPressed: () {},
                           ),
-                        ))),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8, right: 5, left: 2),
-                  child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: Color(0xFF128C7E),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.mic,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {},
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-          )
-        ]),
+                  emojiShowing ? emojiSelect() : Container()
+                ],
+              ),
+            )
+          ]),
+          onWillPop: () {
+            if (emojiShowing) {
+              setState(() => emojiShowing = false);
+            } else {
+              Navigator.pop(context);
+            }
+            return Future.value(false);
+          },
+        ),
+      ),
+    );
+  }
+
+  SizedBox emojiSelect() {
+    return SizedBox(
+      height: 250,
+      child: EmojiPicker(
+        textEditingController: _controller,
+        onEmojiSelected: (category, emoji) {
+          _controller.text = _controller.text + emoji.emoji;
+        },
+        onBackspacePressed: _onBackspacePressed,
+        config: Config(
+          columns: 7,
+          // Issue: https://github.com/flutter/flutter/issues/28894
+          emojiSizeMax: 32 *
+              (foundation.defaultTargetPlatform == TargetPlatform.iOS
+                  ? 1.30
+                  : 1.0),
+          verticalSpacing: 0,
+          horizontalSpacing: 0,
+          gridPadding: EdgeInsets.zero,
+          initCategory: Category.RECENT,
+          bgColor: const Color(0xFFF2F2F2),
+          indicatorColor: Colors.blue,
+          iconColor: Colors.grey,
+          iconColorSelected: Colors.blue,
+          backspaceColor: Colors.blue,
+          skinToneDialogBgColor: Colors.white,
+          skinToneIndicatorColor: Colors.grey,
+          enableSkinTones: true,
+          recentTabBehavior: RecentTabBehavior.RECENT,
+          recentsLimit: 28,
+          replaceEmojiOnLimitExceed: false,
+          noRecents: const Text(
+            'No Recents',
+            style: TextStyle(fontSize: 20, color: Colors.black26),
+            textAlign: TextAlign.center,
+          ),
+          loadingIndicator: const SizedBox.shrink(),
+          tabIndicatorAnimDuration: kTabScrollDuration,
+          categoryIcons: const CategoryIcons(),
+          buttonMode: ButtonMode.MATERIAL,
+          checkPlatformCompatibility: true,
+        ),
       ),
     );
   }
