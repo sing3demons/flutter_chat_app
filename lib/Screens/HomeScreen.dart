@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/Pages/ChatPage.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -20,25 +21,37 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Color(0xFF128C7E),
-          title: Text('chat app'),
+          backgroundColor: const Color(0xFF128C7E),
+          title: const Text('chat app'),
           actions: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-            IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
+            IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+            PopupMenuButton(onSelected: (value) {
+              print(value);
+            }, itemBuilder: (BuildContext context) {
+              return [
+                const PopupMenuItem(
+                    value: 'New group', child: Text('New group')),
+                const PopupMenuItem(
+                    value: 'New broadcast', child: Text('New broadcast')),
+                const PopupMenuItem(
+                    value: 'Whatsapp Web', child: Text('Whatsapp Web')),
+                const PopupMenuItem(
+                    value: 'Starred messages', child: Text('Starred messages')),
+                const PopupMenuItem(value: 'Settings', child: Text('Settings')),
+              ];
+            })
           ]),
-      bottomNavigationBar: TabBar(
-          controller: _controller,
-          tabs: const [
-            Tab(icon: Icon(Icons.camera_alt)),
-            Tab(text: 'CHATS'),
-            Tab(text: 'STATUS'),
-            Tab(text: 'CALLS'),
-          ]),
-      body: TabBarView(controller: _controller, children: const [
-        Text('camera'),
-        Text('Chart'),
-        Text('Status'),
-        Text('Calls'),
+      bottomNavigationBar: TabBar(controller: _controller, tabs: const [
+        Tab(icon: Icon(Icons.camera_alt)),
+        Tab(text: 'CHATS'),
+        Tab(text: 'STATUS'),
+        Tab(text: 'CALLS'),
+      ]),
+      body: TabBarView(controller: _controller, children: [
+        const Text('camera'),
+        ChatPage(),
+        const Text('Status'),
+        const Text('Calls'),
       ]),
     );
   }
