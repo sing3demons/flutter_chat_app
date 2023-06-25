@@ -5,6 +5,7 @@ import 'package:flutter_chat_app/custom_ui/reply_card.dart';
 import 'package:flutter_chat_app/model/chat_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class IndividualPage extends StatefulWidget {
   const IndividualPage({Key? key, required this.chatModel}) : super(key: key);
@@ -25,9 +26,11 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   FocusNode focusNode = FocusNode();
+  late IO.Socket socket;
 
   @override
   void initState() {
+    connect();
     super.initState();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
@@ -36,6 +39,30 @@ class _IndividualPageState extends State<IndividualPage> {
         });
       }
     });
+  }
+
+  void connect() {
+    socket = IO.io('http://192.168.1.100:6000', <String, dynamic>{
+      "transports": ["websocket"],
+      "autoConnect": false,
+    });
+
+    socket.connect();
+    socket.emit('/test', 'test');
+    socket.onConnect((_) {
+      socket.emit('/test', 'test');
+      print('Connection established');
+    });
+    socket.onDisconnect((_) => print('Connection Disconnection'));
+    socket.onConnectError((err) => print(err));
+    socket.onError((err) => print(err));
+  }
+
+  @override
+  void dispose() {
+    socket.disconnect();
+    socket.dispose();
+    super.dispose();
   }
 
   @override
