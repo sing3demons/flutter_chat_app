@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_chat_app/custom_ui/button_card.dart';
 import 'package:flutter_chat_app/custom_ui/contact_card.dart';
 import 'package:flutter_chat_app/model/chat_model.dart';
-import 'package:flutter_chat_app/screens/create_group.dart';
 
-class SelectContact extends StatefulWidget {
-  const SelectContact({Key? key}) : super(key: key);
+class CreateGroup extends StatefulWidget {
+  const CreateGroup({Key? key}) : super(key: key);
 
   @override
-  State<SelectContact> createState() => _SelectContactState();
+  State<CreateGroup> createState() => _CreateGroupState();
 }
 
-class _SelectContactState extends State<SelectContact> {
+class _CreateGroupState extends State<CreateGroup> {
   List<ChatModel> contact = [
     ChatModel(name: 'Dev stack', status: 'A full stack developer'),
     ChatModel(name: 'Qa stack', status: 'Hi dev'),
@@ -22,16 +20,10 @@ class _SelectContactState extends State<SelectContact> {
     ChatModel(name: 'Dev stack', status: 'A full stack developer'),
     ChatModel(name: 'Qa stack', status: 'Hi dev'),
     ChatModel(name: 'SA stack', status: 'Hi dev, qa'),
-    ChatModel(name: 'Dev stack', status: 'A full stack developer'),
-    ChatModel(name: 'Qa stack', status: 'Hi dev'),
-    ChatModel(name: 'SA stack', status: 'Hi dev, qa'),
-    ChatModel(name: 'Dev stack', status: 'A full stack developer'),
-    ChatModel(name: 'Qa stack', status: 'Hi dev'),
-    ChatModel(name: 'SA stack', status: 'Hi dev, qa'),
-    ChatModel(name: 'Dev stack', status: 'A full stack developer'),
-    ChatModel(name: 'Qa stack', status: 'Hi dev'),
-    ChatModel(name: 'SA stack', status: 'Hi dev, qa'),
   ];
+
+  List<ChatModel> groups = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,11 +33,11 @@ class _SelectContactState extends State<SelectContact> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Select Contsct',
+              'New Group',
               style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
             ),
             Text(
-              '256 contscta',
+              'Add participants',
               style: TextStyle(fontSize: 13),
             ),
           ],
@@ -73,25 +65,23 @@ class _SelectContactState extends State<SelectContact> {
         ],
       ),
       body: ListView.builder(
-          itemCount: contact.length + 2,
+          itemCount: contact.length,
           itemBuilder: (context, index) {
-            if (index == 0) {
-              return InkWell(
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (builder) => CreateGroup())),
-                child: const ButtonCard(
-                  icon: Icons.group,
-                  name: "New group",
-                ),
-              );
-            } else if (index == 1) {
-              return const ButtonCard(
-                icon: Icons.person_add,
-                name: "New contact",
-              );
-            } else {
-              return ContactCard(contact: contact[index - 2]);
-            }
+            return InkWell(
+                onTap: () {
+                  if (contact[index].select == true) {
+                    setState(() {
+                      contact[index].select = false;
+                      groups.remove(contact[index]);
+                    });
+                  } else {
+                    setState(() {
+                      contact[index].select = true;
+                      groups.add(contact[index]);
+                    });
+                  }
+                },
+                child: ContactCard(contact: contact[index]));
           }),
     );
   }
