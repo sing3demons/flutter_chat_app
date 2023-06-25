@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/custom_ui/avatar_card.dart';
 import 'package:flutter_chat_app/custom_ui/contact_card.dart';
 import 'package:flutter_chat_app/model/chat_model.dart';
 
@@ -10,7 +11,7 @@ class CreateGroup extends StatefulWidget {
 }
 
 class _CreateGroupState extends State<CreateGroup> {
-  List<ChatModel> contact = [
+  List<ChatModel> contacts = [
     ChatModel(name: 'Dev stack', status: 'A full stack developer'),
     ChatModel(name: 'Qa stack', status: 'Hi dev'),
     ChatModel(name: 'SA stack', status: 'Hi dev, qa'),
@@ -22,7 +23,7 @@ class _CreateGroupState extends State<CreateGroup> {
     ChatModel(name: 'SA stack', status: 'Hi dev, qa'),
   ];
 
-  List<ChatModel> groups = [];
+  List<ChatModel> groupMember = [];
 
   @override
   Widget build(BuildContext context) {
@@ -64,25 +65,65 @@ class _CreateGroupState extends State<CreateGroup> {
               })
         ],
       ),
-      body: ListView.builder(
-          itemCount: contact.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-                onTap: () {
-                  if (contact[index].select == true) {
-                    setState(() {
-                      contact[index].select = false;
-                      groups.remove(contact[index]);
-                    });
-                  } else {
-                    setState(() {
-                      contact[index].select = true;
-                      groups.add(contact[index]);
-                    });
-                  }
-                },
-                child: ContactCard(contact: contact[index]));
-          }),
+      body: Stack(
+        children: [
+          ListView.builder(
+              itemCount: contacts.length + 1,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Container(
+                    height: groupMember.isNotEmpty ? 90 : 0,
+                  );
+                }
+                return InkWell(
+                    onTap: () {
+                      if (contacts[index-1].select == true) {
+                        setState(() {
+                          contacts[index-1].select = false;
+                          groupMember.remove(contacts[index-1]);
+                        });
+                      } else {
+                        setState(() {
+                          contacts[index-1].select = true;
+                          groupMember.add(contacts[index-1]);
+                        });
+                      }
+                    },
+                    child: ContactCard(contact: contacts[index-1]));
+              }),
+          groupMember.isNotEmpty
+              ? Column(
+                  children: [
+                    Container(
+                      height: 75,
+                      color: Colors.white,
+                      child: ListView.builder(
+                        itemCount: contacts.length,
+                        itemBuilder: (context, index) {
+                          if (contacts[index].select == true) {
+                            return InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    contacts[index].select = false;
+                                    groupMember.remove(contacts[index]);
+                                  });
+                                },
+                                child: AvatarCard(contact: contacts[index]));
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                        scrollDirection: Axis.horizontal,
+                      ),
+                    ),
+                    Divider(
+                      thickness: 1,
+                    ),
+                  ],
+                )
+              : Container()
+        ],
+      ),
     );
   }
 }
