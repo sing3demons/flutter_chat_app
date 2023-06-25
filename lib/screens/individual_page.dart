@@ -51,7 +51,7 @@ class _IndividualPageState extends State<IndividualPage> {
               radius: 20,
               backgroundColor: Colors.blueGrey,
               child: SvgPicture.asset(
-                  widget.chatModel.isGroup
+                  widget.chatModel.isGroup!
                       ? 'assets/groups.svg'
                       : 'assets/person.svg',
                   colorFilter:
@@ -97,6 +97,8 @@ class _IndividualPageState extends State<IndividualPage> {
                   const PopupMenuItem(
                       value: 'Mute Notification',
                       child: Text('Mute Notification')),
+                  const PopupMenuItem(
+                      value: 'Wallpaper', child: Text('Wallpaper')),
                 ];
               })
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_app/custom_ui/custom_card.dart';
 import 'package:flutter_chat_app/model/chat_model.dart';
+import 'package:flutter_chat_app/screens/select_contact.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
@@ -33,8 +34,10 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton:
-          FloatingActionButton(onPressed: () {}, child: const Icon(Icons.chat)),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (builder) => SelectContact())),
+          child: const Icon(Icons.chat)),
       body: ListView.builder(
           itemCount: chats.length,
           itemBuilder: (context, index) => CustomCard(chatModel: chats[index])),

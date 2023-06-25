@@ -24,19 +24,19 @@ class CustomCard extends StatelessWidget {
                 backgroundColor: Colors.blueGrey,
                 radius: 30,
                 child: SvgPicture.asset(
-                    chatModel.isGroup
+                    chatModel.isGroup!
                         ? 'assets/groups.svg'
                         : 'assets/person.svg',
                     colorFilter:
                         const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                     height: 37,
                     width: 34)),
-            trailing: Text(chatModel.time),
+            trailing: Text(chatModel.time!),
             subtitle: Row(
               children: [
                 const Icon(Icons.done_all),
                 const SizedBox(width: 3),
-                Text(chatModel.currentMessage,
+                Text(chatModel.currentMessage!,
                     style: const TextStyle(fontSize: 13)),
               ],
             ),
