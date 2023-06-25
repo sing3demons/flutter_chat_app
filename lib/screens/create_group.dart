@@ -53,7 +53,7 @@ class _CreateGroupState extends State<CreateGroup> {
           ),
           PopupMenuButton(
               onSelected: (value) => print(value),
-              itemBuilder: (BuildContext context) {
+              itemBuilder: (context) {
                 return [
                   const PopupMenuItem(
                       value: 'Invite a friend', child: Text('Invite a friend')),
@@ -71,25 +71,23 @@ class _CreateGroupState extends State<CreateGroup> {
               itemCount: contacts.length + 1,
               itemBuilder: (context, index) {
                 if (index == 0) {
-                  return Container(
-                    height: groupMember.isNotEmpty ? 90 : 0,
-                  );
+                  return Container(height: groupMember.isNotEmpty ? 90 : 0);
                 }
                 return InkWell(
                     onTap: () {
-                      if (contacts[index-1].select == true) {
+                      if (contacts[index - 1].select == true) {
                         setState(() {
-                          contacts[index-1].select = false;
-                          groupMember.remove(contacts[index-1]);
+                          contacts[index - 1].select = false;
+                          groupMember.remove(contacts[index - 1]);
                         });
                       } else {
                         setState(() {
-                          contacts[index-1].select = true;
-                          groupMember.add(contacts[index-1]);
+                          contacts[index - 1].select = true;
+                          groupMember.add(contacts[index - 1]);
                         });
                       }
                     },
-                    child: ContactCard(contact: contacts[index-1]));
+                    child: ContactCard(contact: contacts[index - 1]));
               }),
           groupMember.isNotEmpty
               ? Column(
@@ -109,16 +107,13 @@ class _CreateGroupState extends State<CreateGroup> {
                                   });
                                 },
                                 child: AvatarCard(contact: contacts[index]));
-                          } else {
-                            return const SizedBox.shrink();
                           }
+                          return const SizedBox.shrink();
                         },
                         scrollDirection: Axis.horizontal,
                       ),
                     ),
-                    Divider(
-                      thickness: 1,
-                    ),
+                    const Divider(thickness: 1),
                   ],
                 )
               : Container()
