@@ -7,7 +7,6 @@ import 'package:flutter_chat_app/screens/camera_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
-  debugPrint(cameras.first.toString());
   runApp(const MyApp());
 }
 

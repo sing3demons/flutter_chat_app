@@ -1,5 +1,7 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_chat_app/custom_ui/own_message.dart';
+import 'package:flutter_chat_app/custom_ui/reply_card.dart';
 import 'package:flutter_chat_app/model/chat_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/foundation.dart' as foundation;
@@ -108,7 +110,41 @@ class _IndividualPageState extends State<IndividualPage> {
         width: MediaQuery.of(context).size.width,
         child: WillPopScope(
           child: Stack(children: [
-            ListView(),
+            Container(
+              height: MediaQuery.of(context).size.height - 140,
+              child: ListView(children: [
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+                OwnMessageCard(),
+                ReplyCard(),
+              ], shrinkWrap: true),
+            ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Column(
